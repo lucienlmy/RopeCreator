@@ -44,15 +44,27 @@ namespace RopeCreator
 			}
 
 			Menu.showAimMarker = showAimMarker;
-			if (Menu.cbShowAimMarker != default(UIMenuItem))
+			if (Menu.cbShowAimMarker != default(UIMenuCheckboxItem))
 			{
 				Menu.cbShowAimMarker.Checked = showAimMarker;
 			}
 
 			Menu.showEditMarkers = showEditMarkers;
-			if (Menu.cbShowEditMarkers != default(UIMenuItem))
+			if (Menu.cbShowEditMarkers != default(UIMenuCheckboxItem))
 			{
 				Menu.cbShowEditMarkers.Checked = showEditMarkers;
+			}
+
+			Menu.type = ropeType;
+			if (Menu.liRopeIndex != default(UIMenuListItem))
+			{
+				Menu.liRopeIndex.Index = ropeType - 1;
+			}
+
+			Menu.breakable = breakable;
+			if (Menu.cbBreakable != default(UIMenuCheckboxItem))
+			{
+				Menu.cbBreakable.Checked = breakable;
 			}
 		}
 
