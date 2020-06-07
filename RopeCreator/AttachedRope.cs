@@ -22,7 +22,7 @@ namespace RopeCreator
 				deleteFirstEntity = true;
 
 			}
-			else if (!firstEntity.Model.IsVehicle && (INI.attachToObjBone || firstEntity.Model.IsPed))
+			else if (!firstEntity.Model.IsVehicle && (Menu.attachObjBone || firstEntity.Model.IsPed))
 			{
 				//use a prop to attach to peds (and objects if wanted)
 				//using a prop makes the entity unmoveable via rope (e.g. cars can't move peds)
@@ -38,7 +38,7 @@ namespace RopeCreator
 				secondEntity = CreateAttachProp(secondPos);
 				deleteSecondEntity = true;
 			}
-			else if (!secondEntity.Model.IsVehicle && (INI.attachToObjBone || secondEntity.Model.IsPed))
+			else if (!secondEntity.Model.IsVehicle && (Menu.attachObjBone || secondEntity.Model.IsPed))
 			{
 				var attachProp = CreateAttachProp(Vector3.Zero, false);
 				attachProp.AttachTo(secondEntity, Helper.GetClosestBoneIndex(secondEntity, secondPos), secondPos, Vector3.Zero);

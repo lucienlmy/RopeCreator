@@ -12,7 +12,7 @@ namespace RopeCreator
 		internal static GTA.Control attachControl;
 		internal static GTA.Control[] removeLastControls, menuToggleControls;
 		internal static Keys attachKey, removeLastKey, menuToggleKey;
-		internal static bool onlyCreateRopeWhenAiming, onlyShowMarkerWhenAiming, allowIntersectCurrentCar, attachToObjBone;
+		internal static bool onlyCreateRopeWhenAiming, onlyShowMarkerWhenAiming, allowIntersectCurrentCar;
 		internal static int maxRopes;
 		internal static Vector3 camOffset = Vector3.Zero;
 
@@ -35,7 +35,7 @@ namespace RopeCreator
 			camOffset = new Vector3(0f, maxDistance, 0f);
 			int ropeType = Math.Min(Math.Max(settingsFile.GetValue("Rope", "DefaultType", 1), 1), 5);
 			bool breakable = settingsFile.GetValue("Rope", "DefaultBreakable", false);
-			attachToObjBone = settingsFile.GetValue("Rope", "AttachToObjectBone", false);
+			bool attachToObjBone = settingsFile.GetValue("Rope", "AttachToObjectBone", false);
 
 			Menu.modEnabled = enabled;
 			if (Menu.cbEnabled != default(UIMenuCheckboxItem))
@@ -65,6 +65,12 @@ namespace RopeCreator
 			if (Menu.cbBreakable != default(UIMenuCheckboxItem))
 			{
 				Menu.cbBreakable.Checked = breakable;
+			}
+
+			Menu.attachObjBone = attachToObjBone;
+			if (Menu.cbAttachObjBone != default(UIMenuCheckboxItem))
+			{
+				Menu.cbAttachObjBone.Checked = attachToObjBone;
 			}
 		}
 

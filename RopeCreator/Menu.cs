@@ -362,7 +362,7 @@ namespace RopeCreator
 		internal static UIMenu mainMenu, editRopeMenu;
 
 		internal static UIMenuItem miDeleteLast, miDeleteAll;
-		internal static UIMenuCheckboxItem cbEnabled, cbWindAll, cbUnwindAll, cbShowAimMarker, cbShowEditMarkers, cbBreakable;
+		internal static UIMenuCheckboxItem cbEnabled, cbWindAll, cbUnwindAll, cbShowAimMarker, cbShowEditMarkers, cbBreakable, cbAttachObjBone;
 		internal static UIMenuListItem liType;
 		internal static UIMenuSliderItem siSlack, siMinLength;
 
@@ -370,7 +370,7 @@ namespace RopeCreator
 		internal static UIMenuCheckboxItem cbWind, cbUnwind;
 		internal static UIMenuListItem liRopeIndex;
 
-		internal static bool modEnabled = false, showAimMarker = true, showEditMarkers = true, breakable = false;
+		internal static bool modEnabled = false, showAimMarker = true, showEditMarkers = true, breakable = false, attachObjBone = false;
 		internal static int type = 1;
 		internal static float slack = 0.25f, minLength = 0.25f;
 
@@ -405,6 +405,8 @@ namespace RopeCreator
 			cbShowEditMarkers.CheckboxEvent += MainMenu_CheckboxItem_CheckChanged;
 			cbBreakable = new UIMenuCheckboxItem("Breakable", breakable);
 			cbBreakable.CheckboxEvent += MainMenu_CheckboxItem_CheckChanged;
+			cbAttachObjBone = new UIMenuCheckboxItem("Attach to object bone", attachObjBone);
+			cbAttachObjBone.CheckboxEvent += MainMenu_CheckboxItem_CheckChanged;
 			liType = new UIMenuListItem("Type", ROPE_NAMES, type - 1);
 			liType.OnListChanged += liType_IndexChanged;
 			siSlack = new UIMenuSliderItem("Slack", slack.ToString("0.00") + " meters");
@@ -427,6 +429,7 @@ namespace RopeCreator
 			mainMenu.AddItem(cbShowAimMarker);
 			mainMenu.AddItem(cbShowEditMarkers);
 			mainMenu.AddItem(cbBreakable);
+			mainMenu.AddItem(cbAttachObjBone);
 			mainMenu.AddItem(liType);
 			mainMenu.AddItem(siSlack);
 			mainMenu.AddItem(siMinLength);
@@ -497,6 +500,7 @@ namespace RopeCreator
 			else if (sender == cbShowAimMarker) showAimMarker = check;
 			else if (sender == cbShowEditMarkers) showEditMarkers = check;
 			else if (sender == cbBreakable) breakable = check;
+			else if (sender == cbAttachObjBone) attachObjBone = check;
 			else if (sender == cbWindAll)
 			{
 				if (check) RopeCreator.StartWindAllRopes();
