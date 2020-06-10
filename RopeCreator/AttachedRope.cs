@@ -10,6 +10,7 @@ namespace RopeCreator
 		internal Rope rope;
 		internal Entity firstEntity, secondEntity;
 		internal Vector3 firstOffset, secondOffset;
+		internal float length;
 		internal bool deleteFirstEntity = false, deleteSecondEntity = false;
 		internal bool winding = false, unwinding = false;
 
@@ -65,6 +66,7 @@ namespace RopeCreator
 			this.firstOffset = firstEntity.GetOffsetFromWorldCoords(firstPos);
 			this.secondEntity = secondEntity;
 			this.secondOffset = secondEntity.GetOffsetFromWorldCoords(secondPos);
+			this.length = distance;
 		}
 
 		private float RadiansToDegrees(float radian)
@@ -116,6 +118,19 @@ namespace RopeCreator
 		{
 			Function.Call(Hash.STOP_ROPE_UNWINDING_FRONT, rope.Handle);
 			unwinding = false;
+		}
+
+		internal void Reattach()
+		{
+			if (rope == null || !rope.Exists()) return;
+			if (firstEntity == null || !firstEntity.Exists()) return;
+			if (secondEntity == null || !secondEntity.Exists()) return;
+
+			Vector3 firstPos = firstEntity.GetOffsetInWorldCoords(firstOffset),
+				secondPos = secondEntity.GetOffsetInWorldCoords(secondOffset);
+
+			rope.AttachEntities(firstEntity, firstPos, secondEntity, secondPos, length);
+			rope.ActivatePhysics();
 		}
 
 		internal void Delete()

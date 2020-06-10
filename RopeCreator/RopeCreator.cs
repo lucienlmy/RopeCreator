@@ -10,7 +10,7 @@ namespace RopeCreator
 	{
 		internal static List<AttachedRope> ropes = new List<AttachedRope>();
 
-		int nextDeleteBadRopes = 0;
+		int nextDeleteBadRopes = 0, nextReattachRopes = 0;
 		Vector3 firstPos = Vector3.Zero, firstOffset = Vector3.Zero;
 		Entity firstEntity = null;
 
@@ -121,24 +121,48 @@ namespace RopeCreator
 
 		private void DeleteRopesWithBadEntity()
 		{
-			if (Game.GameTime >= nextDeleteBadRopes && ropes.Count > 0)
+			if (Game.GameTime >= nextDeleteBadRopes)
 			{
-				for (int i = 0; i < ropes.Count; i++)
+				if (ropes.Count > 0)
 				{
-					var rope = ropes[i];
-
-					if (rope.firstEntity == null || !rope.firstEntity.Exists() || (rope.firstEntity.Model.IsPed && rope.firstEntity.IsDead) ||
-						rope.secondEntity == null || !rope.secondEntity.Exists() || (rope.secondEntity.Model.IsPed && rope.secondEntity.IsDead))
+					for (int i = 0; i < ropes.Count; i++)
 					{
-						rope.Delete();
-						ropes.RemoveAt(i);
-						i--;
-					}
+						var rope = ropes[i];
 
-					Yield();
+						if (rope.firstEntity == null || !rope.firstEntity.Exists() || (rope.firstEntity.Model.IsPed && rope.firstEntity.IsDead) ||
+							rope.secondEntity == null || !rope.secondEntity.Exists() || (rope.secondEntity.Model.IsPed && rope.secondEntity.IsDead))
+						{
+							rope.Delete();
+							ropes.RemoveAt(i);
+							i--;
+						}
+
+						Yield();
+					}
 				}
 
 				nextDeleteBadRopes = Game.GameTime + 1000;
+			}
+		}
+
+		private void ReattachRagdollPeds()
+		{
+			if (Game.GameTime >= nextReattachRopes)
+			{
+				if (ropes.Count > 0)
+				{
+					foreach (var rope in ropes)
+					{
+						if ((rope.firstEntity.Model.IsPed && ((Ped)rope.firstEntity).IsRagdoll) ||
+							(rope.secondEntity.Model.IsPed && ((Ped)rope.secondEntity).IsRagdoll))
+						{
+							rope.Reattach();
+							UI.ShowSubtitle("Reattach");
+						}
+					}
+				}
+
+				nextReattachRopes = Game.GameTime + 500;
 			}
 		}
 
@@ -227,6 +251,7 @@ namespace RopeCreator
 		private void RopeCreator_Tick(object sender, EventArgs e)
 		{
 			DeleteRopesWithBadEntity();
+			ReattachRagdollPeds();
 			HandleControls();
 		}
 
