@@ -22,15 +22,18 @@ namespace RopeCreator
 				deleteFirstEntity = true;
 
 			}
-			else if (!firstEntity.Model.IsVehicle && (Menu.attachObjBone || firstEntity.Model.IsPed))
+			else if (!firstEntity.Model.IsVehicle)
 			{
-				//use a prop to attach to peds (and objects if wanted)
-				//using a prop makes the entity unmoveable via rope (e.g. cars can't move peds)
-				var attachProp = CreateAttachProp(Vector3.Zero, false);
-				attachProp.AttachTo(firstEntity, Helper.GetClosestBoneIndex(firstEntity, firstPos), firstPos, Vector3.Zero);
+				if ((Menu.attachPedBone && firstEntity.Model.IsPed) || (Menu.attachObjBone && !firstEntity.Model.IsPed))
+				{
+					//use a prop to attach to peds (and objects if wanted)
+					//using a prop makes the entity unmoveable via rope (e.g. cars can't move peds)
+					var attachProp = CreateAttachProp(Vector3.Zero, false);
+					attachProp.AttachTo(firstEntity, Helper.GetClosestBoneIndex(firstEntity, firstPos), firstPos, Vector3.Zero);
 
-				firstEntity = attachProp;
-				deleteFirstEntity = true;
+					firstEntity = attachProp;
+					deleteFirstEntity = true;
+				}
 			}
 
 			if (secondEntity == null || !secondEntity.Exists())
@@ -38,19 +41,22 @@ namespace RopeCreator
 				secondEntity = CreateAttachProp(secondPos);
 				deleteSecondEntity = true;
 			}
-			else if (!secondEntity.Model.IsVehicle && (Menu.attachObjBone || secondEntity.Model.IsPed))
+			else if (!secondEntity.Model.IsVehicle)
 			{
-				var attachProp = CreateAttachProp(Vector3.Zero, false);
-				attachProp.AttachTo(secondEntity, Helper.GetClosestBoneIndex(secondEntity, secondPos), secondPos, Vector3.Zero);
+				if ((Menu.attachPedBone && secondEntity.Model.IsPed) || (Menu.attachObjBone && !secondEntity.Model.IsPed))
+				{
+					var attachProp = CreateAttachProp(Vector3.Zero, false);
+					attachProp.AttachTo(secondEntity, Helper.GetClosestBoneIndex(secondEntity, secondPos), secondPos, Vector3.Zero);
 
-				secondEntity = attachProp;
-				deleteSecondEntity = true;
+					secondEntity = attachProp;
+					deleteSecondEntity = true;
+				}
 			}
 
 			float distance = firstPos.DistanceTo(secondPos) + Menu.slack;
 
 			Rope rope = World.AddRope((RopeType)Menu.type, firstPos, DirectionToRotation(secondPos - firstPos, 0), distance, Math.Min(Menu.minLength, distance), Menu.breakable);
-
+			
 			rope.AttachEntities(firstEntity, firstPos, secondEntity, secondPos, distance);
 			rope.ActivatePhysics();
 

@@ -36,6 +36,7 @@ namespace RopeCreator
 			int ropeType = Math.Min(Math.Max(settingsFile.GetValue("Rope", "DefaultType", 1), 1), 5);
 			bool breakable = settingsFile.GetValue("Rope", "DefaultBreakable", false);
 			bool attachToObjBone = settingsFile.GetValue("Rope", "AttachToObjectBone", false);
+			bool attachToPedBone = settingsFile.GetValue("Rope", "AttachToPedBone", false);
 
 			Menu.modEnabled = enabled;
 			if (Menu.cbEnabled != default(UIMenuCheckboxItem))
@@ -71,6 +72,12 @@ namespace RopeCreator
 			if (Menu.cbAttachObjBone != default(UIMenuCheckboxItem))
 			{
 				Menu.cbAttachObjBone.Checked = attachToObjBone;
+			}
+
+			Menu.attachPedBone = attachToPedBone;
+			if (Menu.cbAttachPedBone != default(UIMenuCheckboxItem))
+			{
+				Menu.cbAttachPedBone.Checked = attachToPedBone;
 			}
 		}
 
