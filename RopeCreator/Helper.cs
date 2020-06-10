@@ -66,7 +66,7 @@ namespace RopeCreator
 		{
 			Ped plrPed = Game.Player.Character;
 
-			if (plrPed.IsInVehicle() && INI.allowIntersectCurrentCar) return World.Raycast(source, target, IntersectOptions.Everything);
+			if (INI.allowIntersectCurrentCar && plrPed.IsInVehicle()) return World.Raycast(source, target, IntersectOptions.Everything);
 			else return World.Raycast(source, target, IntersectOptions.Everything, Game.Player.Character);
 		}
 
