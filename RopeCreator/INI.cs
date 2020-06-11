@@ -35,8 +35,8 @@ namespace RopeCreator
 			camOffset = new Vector3(0f, maxDistance, 0f);
 			int ropeType = Math.Min(Math.Max(settingsFile.GetValue("Rope", "DefaultType", 1), 1), 5);
 			bool breakable = settingsFile.GetValue("Rope", "DefaultBreakable", false);
-			bool attachToObjBone = settingsFile.GetValue("Rope", "AttachToObjectBone", false);
-			bool attachToPedBone = settingsFile.GetValue("Rope", "AttachToPedBone", false);
+			bool attachToObjBone = settingsFile.GetValue("Rope", "DefaultAttachToObjectBone", false);
+			bool attachToPedBone = settingsFile.GetValue("Rope", "DefaultAttachToPedBone", false);
 
 			Menu.modEnabled = enabled;
 			if (Menu.cbEnabled != default(UIMenuCheckboxItem))
