@@ -158,7 +158,6 @@ namespace RopeCreator
 							(rope.secondEntity.Model.IsPed && ((Ped)rope.secondEntity).IsRagdoll))
 						{
 							rope.Reattach();
-							UI.ShowSubtitle("Reattach");
 						}
 					}
 				}
