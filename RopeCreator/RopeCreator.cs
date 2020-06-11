@@ -13,6 +13,7 @@ namespace RopeCreator
 		int nextDeleteBadRopes = 0, nextReattachRopes = 0;
 		Vector3 firstPos = Vector3.Zero, firstOffset = Vector3.Zero;
 		Entity firstEntity = null;
+		bool firstAttachBone = false;
 
 		public RopeCreator()
 		{
@@ -182,6 +183,7 @@ namespace RopeCreator
 						{
 							firstEntity = ray.HitEntity;
 							firstOffset = firstEntity.GetOffsetFromWorldCoords(firstPos);
+							firstAttachBone = !firstEntity.Model.IsVehicle && (Menu.attachPedBone && firstEntity.Model.IsPed) || (Menu.attachObjBone && !firstEntity.Model.IsPed);
 						}
 
 						UI.ShowSubtitle("First position");
@@ -190,14 +192,24 @@ namespace RopeCreator
 					{
 						Vector3 secondPos = ray.HitCoords;
 						Entity secondEntity = null;
-						if (ray.DitHitEntity) secondEntity = ray.HitEntity;
+						bool secondAttachBone = false;
+
+						if (ray.DitHitEntity)
+						{
+							secondEntity = ray.HitEntity;
+
+							if (secondEntity != null && secondEntity.Exists())
+							{
+								secondAttachBone = !secondEntity.Model.IsVehicle && (Menu.attachPedBone && secondEntity.Model.IsPed) || (Menu.attachObjBone && !secondEntity.Model.IsPed);
+							}
+						}
 
 						if (firstEntity != null && firstEntity.Exists())
 						{
 							firstPos = firstEntity.GetOffsetInWorldCoords(firstOffset);
 						}
 
-						var rope = new AttachedRope(firstEntity, firstPos, secondEntity, secondPos);
+						var rope = new AttachedRope(firstEntity, firstPos, firstAttachBone, secondEntity, secondPos, secondAttachBone);
 
 						ropes.Add(rope);
 

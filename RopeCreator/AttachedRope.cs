@@ -14,7 +14,7 @@ namespace RopeCreator
 		internal bool deleteFirstEntity = false, deleteSecondEntity = false;
 		internal bool winding = false, unwinding = false;
 
-		internal AttachedRope(Entity firstEntity, Vector3 firstPos, Entity secondEntity, Vector3 secondPos)
+		internal AttachedRope(Entity firstEntity, Vector3 firstPos, bool firstAttachBone, Entity secondEntity, Vector3 secondPos, bool secondAttachBone)
 		{
 			if (firstEntity == null || !firstEntity.Exists())
 			{
@@ -23,18 +23,15 @@ namespace RopeCreator
 				deleteFirstEntity = true;
 
 			}
-			else if (!firstEntity.Model.IsVehicle)
+			else if (firstAttachBone)
 			{
-				if ((Menu.attachPedBone && firstEntity.Model.IsPed) || (Menu.attachObjBone && !firstEntity.Model.IsPed))
-				{
-					//use a prop to attach to peds (and objects if wanted)
-					//using a prop makes the entity unmoveable via rope (e.g. cars can't move peds)
-					var attachProp = CreateAttachProp(Vector3.Zero, false);
-					attachProp.AttachTo(firstEntity, Helper.GetClosestBoneIndex(firstEntity, firstPos), firstPos, Vector3.Zero);
+				//use a prop to attach to peds (and objects if wanted)
+				//using a prop makes the entity unmoveable via rope (e.g. cars can't move peds)
+				var attachProp = CreateAttachProp(Vector3.Zero, false);
+				attachProp.AttachTo(firstEntity, Helper.GetClosestBoneIndex(firstEntity, firstPos), firstPos, Vector3.Zero);
 
-					firstEntity = attachProp;
-					deleteFirstEntity = true;
-				}
+				firstEntity = attachProp;
+				deleteFirstEntity = true;
 			}
 
 			if (secondEntity == null || !secondEntity.Exists())
@@ -42,22 +39,19 @@ namespace RopeCreator
 				secondEntity = CreateAttachProp(secondPos);
 				deleteSecondEntity = true;
 			}
-			else if (!secondEntity.Model.IsVehicle)
+			else if (secondAttachBone)
 			{
-				if ((Menu.attachPedBone && secondEntity.Model.IsPed) || (Menu.attachObjBone && !secondEntity.Model.IsPed))
-				{
-					var attachProp = CreateAttachProp(Vector3.Zero, false);
-					attachProp.AttachTo(secondEntity, Helper.GetClosestBoneIndex(secondEntity, secondPos), secondPos, Vector3.Zero);
+				var attachProp = CreateAttachProp(Vector3.Zero, false);
+				attachProp.AttachTo(secondEntity, Helper.GetClosestBoneIndex(secondEntity, secondPos), secondPos, Vector3.Zero);
 
-					secondEntity = attachProp;
-					deleteSecondEntity = true;
-				}
+				secondEntity = attachProp;
+				deleteSecondEntity = true;
 			}
 
 			float distance = firstPos.DistanceTo(secondPos) + Menu.slack;
 
 			Rope rope = World.AddRope((RopeType)Menu.type, firstPos, DirectionToRotation(secondPos - firstPos, 0), distance, Math.Min(Menu.minLength, distance), Menu.breakable);
-			
+
 			rope.AttachEntities(firstEntity, firstPos, secondEntity, secondPos, distance);
 			rope.ActivatePhysics();
 
@@ -73,7 +67,7 @@ namespace RopeCreator
 		{
 			return radian * (float)(180.0 / Math.PI);
 		}
-		
+
 		private Vector3 DirectionToRotation(Vector3 dir, float roll)
 		{
 			dir = Vector3.Normalize(dir);
@@ -89,7 +83,7 @@ namespace RopeCreator
 		private Prop CreateAttachProp(Vector3 pos, bool freeze = true)
 		{
 			Prop prop = World.CreateProp("prop_ashtray_01", pos, true, false);
-			
+
 			prop.FreezePosition = freeze;
 			prop.IsVisible = false;
 
