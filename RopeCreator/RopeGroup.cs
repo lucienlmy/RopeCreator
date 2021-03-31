@@ -85,9 +85,11 @@ namespace RopeCreator
 			return true;
 		}
 
-		internal void DeleteRopesWithBadEntity()
+		internal bool DeleteRopesWithBadEntity()
 		{
-			if (ropes.Count == 0) return;
+			if (ropes.Count == 0) return false;
+
+			bool deletedOne = false;
 
 			for (int i = 0; i < ropes.Count; i++)
 			{
@@ -99,8 +101,12 @@ namespace RopeCreator
 					rope.Delete();
 					ropes.RemoveAt(i);
 					i--;
+
+					deletedOne = true;
 				}
 			}
+
+			return deletedOne;
 		}
 
 		internal void ReattachRagdollPeds()

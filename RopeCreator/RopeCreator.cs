@@ -116,12 +116,19 @@ namespace RopeCreator
 		{
 			if (Game.GameTime >= nextDeleteBadRopes)
 			{
+				bool deletedOne = false;
+
 				foreach (var group in ropeGroups)
 				{
-					group.DeleteRopesWithBadEntity();
+					if (group.DeleteRopesWithBadEntity())
+					{
+						deletedOne = true;
+					}
 
 					Yield();
 				}
+
+				if (deletedOne) Menu.ReloadRopeIndices();
 
 				nextDeleteBadRopes = Game.GameTime + 1000;
 			}
