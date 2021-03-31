@@ -54,6 +54,7 @@ namespace RopeCreator
 			cbEnabled = new NativeCheckboxItem("Enabled", modEnabled);
 			cbEnabled.CheckboxChanged += MainMenu_CheckboxItem_CheckChanged;
 			liGroupIndex = new NativeListItem<int>("Rope group", 1, 2, 3, 4, 5);
+			liGroupIndex.ItemChanged += liGroupIndex_ItemChanged;
 			miDeleteLast = new NativeItem("Delete last rope");
 			miDeleteAll = new NativeItem("Delete all ropes");
 			cbWindAll = new NativeCheckboxItem("Wind all ropes", false);
@@ -143,6 +144,11 @@ namespace RopeCreator
 		private void MainMenu_Opening(object sender, CancelEventArgs e)
 		{
 			SetWindChecks();
+		}
+
+		private void liGroupIndex_ItemChanged(object sender, ItemChangedEventArgs<int> e)
+		{
+			ReloadRopeIndices(true);
 		}
 
 		private void MainMenu_ItemActivated(object sender, ItemActivatedArgs e)
