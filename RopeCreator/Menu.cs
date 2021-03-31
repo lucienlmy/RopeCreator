@@ -19,7 +19,7 @@ namespace RopeCreator
 		internal static NativeMenu mainMenu, editGroupMenu, editRopeMenu;
 
 		internal static NativeItem miDeleteLast, miDeleteAll;
-		internal static NativeCheckboxItem cbEnabled, cbWindAll, cbUnwindAll, cbShowAimMarker, cbShowEditMarkers, cbBreakable, cbAttachObjBone, cbAttachPedBone;
+		internal static NativeCheckboxItem cbEnabled, cbWindAll, cbUnwindAll, cbShowAimMarker, cbShowEditMarkers, cbBreakable, cbAttachObjBone, cbAttachPedBone, cbAttachNothing;
 		internal static NativeListItem<int> liGroupIndex;
 		internal static NativeListItem<string> liType;
 		internal static NativeSliderItem siSlack, siMinLength;
@@ -31,7 +31,7 @@ namespace RopeCreator
 		internal static NativeCheckboxItem cbWind, cbUnwind;
 		internal static NativeListItem<int> liRopeIndex;
 
-		internal static bool modEnabled = false, showAimMarker = true, showEditMarkers = true, breakable = false, attachObjBone = false, attachPedBone = false;
+		internal static bool modEnabled = false, showAimMarker = true, showEditMarkers = true, breakable = false, attachObjBone = false, attachPedBone = false, attachNothing = false;
 		internal static int type = 1;
 		internal static float slack = 0.25f, minLength = 0.25f;
 
@@ -83,6 +83,8 @@ namespace RopeCreator
 			cbAttachObjBone.CheckboxChanged += MainMenu_CheckboxItem_CheckChanged;
 			cbAttachPedBone = new NativeCheckboxItem("Attach to ped bone", attachPedBone);
 			cbAttachPedBone.CheckboxChanged += MainMenu_CheckboxItem_CheckChanged;
+			cbAttachNothing = new NativeCheckboxItem("Attach to nothing", attachNothing);
+			cbAttachNothing.CheckboxChanged += MainMenu_CheckboxItem_CheckChanged;
 
 			editGroupMenu = new NativeMenu("Edit Group");
 			editGroupMenu.UseMouse = false;
@@ -127,6 +129,7 @@ namespace RopeCreator
 			mainMenu.Add(siMinLength);
 			mainMenu.Add(cbAttachObjBone);
 			mainMenu.Add(cbAttachPedBone);
+			mainMenu.Add(cbAttachNothing);
 
 			editGroupMenu.AddSubMenu(editRopeMenu);
 			editGroupMenu.Add(miDeleteGroup);
@@ -216,6 +219,7 @@ namespace RopeCreator
 			else if (sender == cbBreakable) breakable = cbBreakable.Checked;
 			else if (sender == cbAttachObjBone) attachObjBone = cbAttachObjBone.Checked;
 			else if (sender == cbAttachPedBone) attachPedBone = cbAttachPedBone.Checked;
+			else if (sender == cbAttachNothing) attachNothing = cbAttachNothing.Checked;
 			else if (sender == cbWindAll)
 			{
 				if (cbWindAll.Checked) RopeCreator.StartWindAllRopes();

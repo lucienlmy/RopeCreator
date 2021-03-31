@@ -37,6 +37,7 @@ namespace RopeCreator
 			bool breakable = settingsFile.GetValue("Rope", "DefaultBreakable", false);
 			bool attachToObjBone = settingsFile.GetValue("Rope", "DefaultAttachToObjectBone", false);
 			bool attachToPedBone = settingsFile.GetValue("Rope", "DefaultAttachToPedBone", false);
+			bool attachNothing = settingsFile.GetValue("Rope", "DefaultAttachToNothing", false);
 
 			Menu.modEnabled = enabled;
 			if (Menu.cbEnabled != default(NativeCheckboxItem))
@@ -78,6 +79,12 @@ namespace RopeCreator
 			if (Menu.cbAttachPedBone != default(NativeCheckboxItem))
 			{
 				Menu.cbAttachPedBone.Checked = attachToPedBone;
+			}
+
+			Menu.attachNothing = attachNothing;
+			if (Menu.cbAttachNothing != default(NativeCheckboxItem))
+			{
+				Menu.cbAttachNothing.Checked = attachNothing;
 			}
 		}
 

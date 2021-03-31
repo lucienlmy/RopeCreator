@@ -146,34 +146,56 @@ namespace RopeCreator
 			{
 				var ray = Helper.CreateRaycastFromCam();
 
-				if (ray.DitHitAnything)
+				if (Menu.attachNothing || ray.DitHitAnything)
 				{
 					if (firstPos == Vector3.Zero)
 					{
-						firstPos = ray.HitCoords;
-
-						if (ray.DitHitEntity && ray.HitEntity != null && ray.HitEntity.Exists())
+						if (!ray.DitHitAnything) //attach to nothing
 						{
-							firstEntity = ray.HitEntity;
-							firstOffset = firstEntity.GetOffsetFromWorldCoords(firstPos);
-							firstAttachBone = !firstEntity.Model.IsVehicle && ((Menu.attachPedBone && firstEntity.Model.IsPed) || (Menu.attachObjBone && !firstEntity.Model.IsPed));
+							Camera cam = World.RenderingCamera;
+
+							if (cam != null && cam.Exists()) firstPos = cam.GetOffsetInWorldCoords(INI.camOffset);
+							else firstPos = GameplayCamera.GetOffsetInWorldCoords(INI.camOffset);
+						}
+						else
+						{
+							firstPos = ray.HitCoords;
+
+							if (ray.DitHitEntity && ray.HitEntity != null && ray.HitEntity.Exists())
+							{
+								firstEntity = ray.HitEntity;
+								firstOffset = firstEntity.GetOffsetFromWorldCoords(firstPos);
+								firstAttachBone = !firstEntity.Model.IsVehicle && ((Menu.attachPedBone && firstEntity.Model.IsPed) || (Menu.attachObjBone && !firstEntity.Model.IsPed));
+							}
 						}
 
 						UI.ShowSubtitle("First position");
 					}
 					else
 					{
-						Vector3 secondPos = ray.HitCoords;
+						Vector3 secondPos;
 						Entity secondEntity = null;
 						bool secondAttachBone = false;
 
-						if (ray.DitHitEntity)
+						if (!ray.DitHitAnything) //attach to nothing
 						{
-							secondEntity = ray.HitEntity;
+							Camera cam = World.RenderingCamera;
 
-							if (secondEntity != null && secondEntity.Exists())
+							if (cam != null && cam.Exists()) secondPos = cam.GetOffsetInWorldCoords(INI.camOffset);
+							else secondPos = GameplayCamera.GetOffsetInWorldCoords(INI.camOffset);
+						}
+						else
+						{
+							secondPos = ray.HitCoords;
+
+							if (ray.DitHitEntity)
 							{
-								secondAttachBone = !secondEntity.Model.IsVehicle && ((Menu.attachPedBone && secondEntity.Model.IsPed) || (Menu.attachObjBone && !secondEntity.Model.IsPed));
+								secondEntity = ray.HitEntity;
+
+								if (secondEntity != null && secondEntity.Exists())
+								{
+									secondAttachBone = !secondEntity.Model.IsVehicle && ((Menu.attachPedBone && secondEntity.Model.IsPed) || (Menu.attachObjBone && !secondEntity.Model.IsPed));
+								}
 							}
 						}
 
