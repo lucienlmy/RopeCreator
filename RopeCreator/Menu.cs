@@ -146,6 +146,7 @@ namespace RopeCreator
 
 		private void MainMenu_Opening(object sender, CancelEventArgs e)
 		{
+			lastVisibleMenu = mainMenu;
 			SetWindChecks();
 		}
 
@@ -240,6 +241,7 @@ namespace RopeCreator
 
 		private void EditGroupMenu_Opening(object sender, CancelEventArgs e)
 		{
+			lastVisibleMenu = editGroupMenu;
 			SetWindChecks();
 		}
 
@@ -278,6 +280,7 @@ namespace RopeCreator
 
 		private void EditRopeMenu_Opening(object sender, CancelEventArgs e)
 		{
+			lastVisibleMenu = editRopeMenu;
 			ReloadRopeIndices();
 		}
 
