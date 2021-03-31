@@ -278,8 +278,6 @@ namespace RopeCreator
 
 		private void EditRopeMenu_Opening(object sender, CancelEventArgs e)
 		{
-			var group = RopeCreator.ropeGroups[liGroupIndex.SelectedIndex];
-
 			ReloadRopeIndices();
 		}
 
