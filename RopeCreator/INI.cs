@@ -1,6 +1,6 @@
 ﻿using GTA;
 using GTA.Math;
-using NativeUI;
+using LemonUI.Menus;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -39,43 +39,43 @@ namespace RopeCreator
 			bool attachToPedBone = settingsFile.GetValue("Rope", "DefaultAttachToPedBone", false);
 
 			Menu.modEnabled = enabled;
-			if (Menu.cbEnabled != default(UIMenuCheckboxItem))
+			if (Menu.cbEnabled != default(NativeCheckboxItem))
 			{
 				Menu.cbEnabled.Checked = enabled;
 			}
 
 			Menu.showAimMarker = showAimMarker;
-			if (Menu.cbShowAimMarker != default(UIMenuCheckboxItem))
+			if (Menu.cbShowAimMarker != default(NativeCheckboxItem))
 			{
 				Menu.cbShowAimMarker.Checked = showAimMarker;
 			}
 
 			Menu.showEditMarkers = showEditMarkers;
-			if (Menu.cbShowEditMarkers != default(UIMenuCheckboxItem))
+			if (Menu.cbShowEditMarkers != default(NativeCheckboxItem))
 			{
 				Menu.cbShowEditMarkers.Checked = showEditMarkers;
 			}
 
 			Menu.type = ropeType;
-			if (Menu.liRopeIndex != default(UIMenuListItem))
+			if (Menu.liRopeIndex != default(NativeListItem<int>))
 			{
-				Menu.liRopeIndex.Index = ropeType - 1;
+				Menu.liRopeIndex.SelectedIndex = ropeType - 1;
 			}
 
 			Menu.breakable = breakable;
-			if (Menu.cbBreakable != default(UIMenuCheckboxItem))
+			if (Menu.cbBreakable != default(NativeCheckboxItem))
 			{
 				Menu.cbBreakable.Checked = breakable;
 			}
 
 			Menu.attachObjBone = attachToObjBone;
-			if (Menu.cbAttachObjBone != default(UIMenuCheckboxItem))
+			if (Menu.cbAttachObjBone != default(NativeCheckboxItem))
 			{
 				Menu.cbAttachObjBone.Checked = attachToObjBone;
 			}
 
 			Menu.attachPedBone = attachToPedBone;
-			if (Menu.cbAttachPedBone != default(UIMenuCheckboxItem))
+			if (Menu.cbAttachPedBone != default(NativeCheckboxItem))
 			{
 				Menu.cbAttachPedBone.Checked = attachToPedBone;
 			}

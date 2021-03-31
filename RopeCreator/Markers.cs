@@ -1,6 +1,7 @@
 ﻿using GTA;
 using GTA.Math;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace RopeCreator
@@ -10,7 +11,7 @@ namespace RopeCreator
 		readonly Vector3 aimMarkerScale = new Vector3(0.05f, 0.05f, 0.05f), ropeMarkerScale = new Vector3(0.2f, 0.2f, 0.2f);
 
 		Vector3 aimMarkerPos = Vector3.Zero;
-		Vector3 ropeMarker1Pos = Vector3.Zero, ropeMarker2Pos = Vector3.Zero;
+		List<Vector3> ropeMarkerPositions = new List<Vector3>();
 
 		int nextGetMarkerPos = 0;
 
@@ -32,20 +33,39 @@ namespace RopeCreator
 
 		private void GetEditRopeMarkerPos()
 		{
-			if (Menu.showEditMarkers && Menu.editRopeMenu.Visible)
+			ropeMarkerPositions.Clear();
+
+			if (Menu.showEditMarkers)
 			{
-				int selectedRopeIndex = (int)Menu.liRopeIndex.Items[Menu.liRopeIndex.Index];
-
-				if (selectedRopeIndex > -1)
+				if ((Menu.mainMenu.Visible && Menu.mainMenu.SelectedItem == Menu.liGroupIndex) || Menu.editGroupMenu.Visible || Menu.editRopeMenu.Visible)
 				{
-					var selectedRope = RopeCreator.ropes[selectedRopeIndex];
+					var group = RopeCreator.ropeGroups[Menu.liGroupIndex.SelectedIndex];
 
-					ropeMarker1Pos = selectedRope.firstEntity.GetOffsetInWorldCoords(selectedRope.firstOffset);
-					ropeMarker2Pos = selectedRope.secondEntity.GetOffsetInWorldCoords(selectedRope.secondOffset);
+					if ((Menu.mainMenu.Visible && Menu.mainMenu.SelectedItem == Menu.liGroupIndex) || Menu.editGroupMenu.Visible)
+					{
+						if (group.ropes.Count > 0)
+						{
+							foreach (var rope in group.ropes)
+							{
+								ropeMarkerPositions.Add(rope.firstEntity.GetOffsetInWorldCoords(rope.firstOffset));
+								ropeMarkerPositions.Add(rope.secondEntity.GetOffsetInWorldCoords(rope.secondOffset));
+							}
+						}
+					}
+					else
+					{
+						int selectedRopeIndex = Menu.liRopeIndex.SelectedItem;
+
+						if (selectedRopeIndex > -1)
+						{
+							var selectedRope = group.ropes[selectedRopeIndex];
+
+							ropeMarkerPositions.Add(selectedRope.firstEntity.GetOffsetInWorldCoords(selectedRope.firstOffset));
+							ropeMarkerPositions.Add(selectedRope.secondEntity.GetOffsetInWorldCoords(selectedRope.secondOffset));
+						}
+					}
 				}
-				else ropeMarker1Pos = ropeMarker2Pos = Vector3.Zero;
 			}
-			else ropeMarker1Pos = ropeMarker2Pos = Vector3.Zero;
 		}
 
 		private void GetAllMarkerPos()
@@ -58,7 +78,7 @@ namespace RopeCreator
 				nextGetMarkerPos = Game.GameTime + 10;
 			}
 		}
-		
+
 		private void DrawMarkers()
 		{
 			if (Game.IsScreenFadedIn && Game.Player.CanControlCharacter && Menu.modEnabled)
@@ -68,10 +88,12 @@ namespace RopeCreator
 					World.DrawMarker(MarkerType.DebugSphere, aimMarkerPos, Vector3.Zero, Vector3.Zero, aimMarkerScale, Color.Blue);
 				}
 
-				if (Menu.showEditMarkers && ropeMarker1Pos != Vector3.Zero && ropeMarker2Pos != Vector3.Zero)
+				if (Menu.showEditMarkers && ropeMarkerPositions.Count > 0)
 				{
-					World.DrawMarker(MarkerType.DebugSphere, ropeMarker1Pos, Vector3.Zero, Vector3.Zero, ropeMarkerScale, Color.Purple);
-					World.DrawMarker(MarkerType.DebugSphere, ropeMarker2Pos, Vector3.Zero, Vector3.Zero, ropeMarkerScale, Color.Purple);
+					foreach (var pos in ropeMarkerPositions)
+					{
+						World.DrawMarker(MarkerType.DebugSphere, pos, Vector3.Zero, Vector3.Zero, ropeMarkerScale, Color.Purple);
+					}
 				}
 			}
 		}

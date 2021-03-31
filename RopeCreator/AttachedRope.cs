@@ -7,6 +7,7 @@ namespace RopeCreator
 {
 	class AttachedRope
 	{
+		internal RopeGroup group;
 		internal Rope rope;
 		internal Entity firstEntity, secondEntity;
 		internal Vector3 firstOffset, secondOffset;
@@ -55,6 +56,7 @@ namespace RopeCreator
 			rope.AttachEntities(firstEntity, firstPos, secondEntity, secondPos, distance);
 			rope.ActivatePhysics();
 
+			this.group = RopeCreator.ropeGroups[Menu.liGroupIndex.SelectedIndex];
 			this.rope = rope;
 			this.firstEntity = firstEntity;
 			this.firstOffset = firstEntity.GetOffsetFromWorldCoords(firstPos);

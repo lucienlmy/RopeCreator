@@ -1,14 +1,13 @@
 ﻿using GTA;
 using GTA.Math;
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace RopeCreator
 {
 	public class RopeCreator : Script
 	{
-		internal static List<AttachedRope> ropes = new List<AttachedRope>();
+		internal static RopeGroup[] ropeGroups = { new RopeGroup(), new RopeGroup(), new RopeGroup(), new RopeGroup(), new RopeGroup() };
 
 		int nextDeleteBadRopes = 0, nextReattachRopes = 0;
 		Vector3 firstPos = Vector3.Zero, firstOffset = Vector3.Zero;
@@ -24,27 +23,24 @@ namespace RopeCreator
 			Interval = 1;
 			Tick += RopeCreator_Tick;
 		}
-		
+
 		internal static void DeleteAllRopes()
 		{
-			if (ropes.Count > 0)
+			foreach (var group in ropeGroups)
 			{
-				foreach (var rope in ropes)
-				{
-					rope.Delete();
-				}
-
-				ropes.Clear();
+				group.DeleteRopes();
 			}
 		}
 
 		internal static void DeleteLastRope(bool showSubtitle = false)
 		{
-			if (ropes.Count > 0)
+			var group = ropeGroups[Menu.liGroupIndex.SelectedIndex];
+
+			if (group.ropes.Count > 0)
 			{
-				int lastIndex = ropes.Count - 1;
-				ropes[lastIndex].Delete();
-				ropes.RemoveAt(lastIndex);
+				int lastIndex = group.ropes.Count - 1;
+				group.ropes[lastIndex].Delete();
+				group.ropes.RemoveAt(lastIndex);
 
 				UI.ShowSubtitle("Deleted last rope");
 			}
@@ -52,71 +48,67 @@ namespace RopeCreator
 
 		internal static bool AreAllRopesWinding()
 		{
-			if (ropes.Count == 0) return false;
-			
-			foreach (var rope in ropes)
+			bool oneNotEmpty = false;
+
+			foreach (var group in ropeGroups)
 			{
-				if (!rope.winding) return false;
+				if (group.ropes.Count == 0) continue; //skip empty groups
+
+				oneNotEmpty = true;
+
+				if (!group.AreAllRopesWinding()) return false;
 			}
 
-			return true;
+			//only return true if there is at least one rope
+			return oneNotEmpty;
 		}
 
 		internal static bool AreAllRopesUnwinding()
 		{
-			if (ropes.Count == 0) return false;
+			bool oneNotEmpty = false;
 
-			foreach (var rope in ropes)
+			foreach (var group in ropeGroups)
 			{
-				if (!rope.unwinding) return false;
+				if (group.ropes.Count == 0) continue; //skip empty groups
+
+				oneNotEmpty = true;
+
+				if (!group.AreAllRopesUnwinding()) return false;
 			}
 
-			return true;
+			//only return true if there is at least one rope
+			return oneNotEmpty;
 		}
 
 		internal static void StartWindAllRopes()
 		{
-			if (ropes.Count > 0)
+			foreach (var group in ropeGroups)
 			{
-				foreach (var rope in ropes)
-				{
-					rope.StopUnwind();
-					rope.StartWind();
-				}
+				group.StartWindRopes();
 			}
 		}
 
 		internal static void StartUnwindAllRopes()
 		{
-			if (ropes.Count > 0)
+			foreach (var group in ropeGroups)
 			{
-				foreach (var rope in ropes)
-				{
-					rope.StopWind();
-					rope.StartUnwind();
-				}
+				group.StartUnwindRopes();
 			}
 		}
 
 		internal static void StopWindAllRopes()
 		{
-			if (ropes.Count > 0)
+			foreach (var group in ropeGroups)
 			{
-				foreach (var rope in ropes)
-				{
-					rope.StopWind();
-				}
+				group.StopWindRopes();
 			}
 		}
 
 		internal static void StopUnwindAllRopes()
 		{
-			if (ropes.Count > 0)
+			foreach (var group in ropeGroups)
 			{
-				foreach (var rope in ropes)
-				{
-					rope.StopUnwind();
-				}
+				group.StopUnwindRopes();
 			}
 		}
 
@@ -124,22 +116,11 @@ namespace RopeCreator
 		{
 			if (Game.GameTime >= nextDeleteBadRopes)
 			{
-				if (ropes.Count > 0)
+				foreach (var group in ropeGroups)
 				{
-					for (int i = 0; i < ropes.Count; i++)
-					{
-						var rope = ropes[i];
+					group.DeleteRopesWithBadEntity();
 
-						if (rope.firstEntity == null || !rope.firstEntity.Exists() || (rope.firstEntity.Model.IsPed && rope.firstEntity.IsDead) ||
-							rope.secondEntity == null || !rope.secondEntity.Exists() || (rope.secondEntity.Model.IsPed && rope.secondEntity.IsDead))
-						{
-							rope.Delete();
-							ropes.RemoveAt(i);
-							i--;
-						}
-
-						Yield();
-					}
+					Yield();
 				}
 
 				nextDeleteBadRopes = Game.GameTime + 1000;
@@ -150,16 +131,9 @@ namespace RopeCreator
 		{
 			if (Game.GameTime >= nextReattachRopes)
 			{
-				if (ropes.Count > 0)
+				foreach (var group in ropeGroups)
 				{
-					foreach (var rope in ropes)
-					{
-						if ((rope.firstEntity.Model.IsPed && ((Ped)rope.firstEntity).IsRagdoll) ||
-							(rope.secondEntity.Model.IsPed && ((Ped)rope.secondEntity).IsRagdoll))
-						{
-							rope.Reattach();
-						}
-					}
+					group.ReattachRagdollPeds();
 				}
 
 				nextReattachRopes = Game.GameTime + 500;
@@ -182,7 +156,7 @@ namespace RopeCreator
 						{
 							firstEntity = ray.HitEntity;
 							firstOffset = firstEntity.GetOffsetFromWorldCoords(firstPos);
-							firstAttachBone = !firstEntity.Model.IsVehicle && (Menu.attachPedBone && firstEntity.Model.IsPed) || (Menu.attachObjBone && !firstEntity.Model.IsPed);
+							firstAttachBone = !firstEntity.Model.IsVehicle && ((Menu.attachPedBone && firstEntity.Model.IsPed) || (Menu.attachObjBone && !firstEntity.Model.IsPed));
 						}
 
 						UI.ShowSubtitle("First position");
@@ -199,7 +173,7 @@ namespace RopeCreator
 
 							if (secondEntity != null && secondEntity.Exists())
 							{
-								secondAttachBone = !secondEntity.Model.IsVehicle && (Menu.attachPedBone && secondEntity.Model.IsPed) || (Menu.attachObjBone && !secondEntity.Model.IsPed);
+								secondAttachBone = !secondEntity.Model.IsVehicle && ((Menu.attachPedBone && secondEntity.Model.IsPed) || (Menu.attachObjBone && !secondEntity.Model.IsPed));
 							}
 						}
 
@@ -210,15 +184,17 @@ namespace RopeCreator
 
 						var rope = new AttachedRope(firstEntity, firstPos, firstAttachBone, secondEntity, secondPos, secondAttachBone);
 
-						ropes.Add(rope);
+						var group = ropeGroups[Menu.liGroupIndex.SelectedIndex];
 
-						if (ropes.Count > INI.maxRopes)
+						group.ropes.Add(rope);
+
+						if (group.ropes.Count > INI.maxRopes)
 						{
-							ropes[0].Delete();
-							ropes.RemoveAt(0);
+							group.ropes[0].Delete();
+							group.ropes.RemoveAt(0);
 						}
 
-						Menu.ReloadRopeIndices(ropes.Count, ropes.Count - 1);
+						Menu.ReloadRopeIndices(true); //true = select last item
 
 						firstPos = Vector3.Zero;
 						firstEntity = null;
@@ -243,8 +219,10 @@ namespace RopeCreator
 				{
 					if (Helper.AreControlsJustPressed(INI.removeLastControls))
 					{
+						var group = ropeGroups[Menu.liGroupIndex.SelectedIndex];
+
 						DeleteLastRope(true);
-						Menu.ReloadRopeIndices(ropes.Count);
+						Menu.ReloadRopeIndices();
 					}
 					else if (Game.IsControlJustPressed(0, INI.attachControl))
 					{
@@ -281,8 +259,10 @@ namespace RopeCreator
 				}
 				else if (e.KeyCode == INI.removeLastKey)
 				{
+					var group = ropeGroups[Menu.liGroupIndex.SelectedIndex];
+
 					DeleteLastRope(true);
-					Menu.ReloadRopeIndices(ropes.Count);
+					Menu.ReloadRopeIndices();
 				}
 			}
 		}
