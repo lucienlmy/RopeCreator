@@ -25,10 +25,10 @@
   <ItemGroup>
     <Reference Include="LemonUI.SHVDN2, Version=1.3.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Downloaded Mods\Scripts\LemonUI_1.3\SHVDN2\LemonUI.SHVDN2.dll</HintPath>
+      <HintPath>..\..\..\..\Source\1 脚本编写支持文件\LemonUI.SHVDN2.dll</HintPath>
     </Reference>
     <Reference Include="ScriptHookVDotNet2">
-      <HintPath>..\..\..\Downloaded Mods\Scripts\ScriptHookVDotNet_2.10.10\ScriptHookVDotNet2.dll</HintPath>
+      <HintPath>..\..\..\..\Source\1 脚本编写支持文件\ScriptHookVDotNet2.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -48,7 +48,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /Y "$(TargetDir)$(TargetName)*" "C:\Games\Grand Theft Auto V\scripts\"</PostBuildEvent>
+    <PostBuildEvent>copy /Y "$(TargetDir)$(TargetName)*" "D:\源代码\S 绳索\ropecreator-gta5\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -161,7 +161,8 @@ namespace RopeCreator
 
 			if (e.Item == liGroupIndex)
 			{
-				mainMenu.Close();
+                //mainMenu.Close();
+                mainMenu.Visible = true;
 
 				if (!mainMenu.Visible)
 				{
@@ -173,8 +174,9 @@ namespace RopeCreator
 
 					editGroupMenu.Recalculate();
 
-					editGroupMenu.Open();
-				}
+					//editGroupMenu.Open();
+                    editGroupMenu.Visible = true;
+                }
 			}
 			else if (e.Item == miDeleteLast)
 			{
@@ -457,9 +459,11 @@ namespace RopeCreator
 				else if (editGroupMenu.Visible) lastVisibleMenu = editGroupMenu;
 				else lastVisibleMenu = editRopeMenu;
 
-				lastVisibleMenu.Close();
+                //lastVisibleMenu.Close();
+                lastVisibleMenu.Visible = false;
 			}
-			else lastVisibleMenu.Open();
+            //else lastVisibleMenu.Open();
+            else lastVisibleMenu.Visible = true;
 		}
 	}
 }
