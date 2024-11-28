@@ -1,22 +1,25 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RopeCreator", "RopeCreator\RopeCreator.csproj", "{03475558-3B99-4B3F-B671-853A2E8A35E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RopeCreator", "RopeCreator.csproj", "{9E57B791-4AEC-4C99-AF90-E326C0D1F0D1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|x64 = Debug|x64
-		Release|x64 = Release|x64
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{03475558-3B99-4B3F-B671-853A2E8A35E9}.Debug|x64.ActiveCfg = Debug|x64
-		{03475558-3B99-4B3F-B671-853A2E8A35E9}.Debug|x64.Build.0 = Debug|x64
-		{03475558-3B99-4B3F-B671-853A2E8A35E9}.Release|x64.ActiveCfg = Release|x64
-		{03475558-3B99-4B3F-B671-853A2E8A35E9}.Release|x64.Build.0 = Release|x64
+		{9E57B791-4AEC-4C99-AF90-E326C0D1F0D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E57B791-4AEC-4C99-AF90-E326C0D1F0D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E57B791-4AEC-4C99-AF90-E326C0D1F0D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E57B791-4AEC-4C99-AF90-E326C0D1F0D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0DE2AF81-50B9-42EB-ADF1-8CC991EF990A}
 	EndGlobalSection
 EndGlobal
