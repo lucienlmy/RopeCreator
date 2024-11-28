@@ -1,5 +1,5 @@
 # 一个玩绳子的 Mod
-#这个版本不能进入子绳索里面
+
 
 [查看详细信息](https://www.gta5-mods.com/scripts/rope-creator#description_tab)
 

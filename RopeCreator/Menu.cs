@@ -96,7 +96,7 @@ internal class Menu : Script
 	{
 		objPool = new ObjectPool();
 		mainMenu = new NativeMenu("Rope Creator");
-		mainMenu.UseMouse = false;
+		mainMenu.UseMouse = true;
 		mainMenu.Opening += MainMenu_Opening;
 		mainMenu.ItemActivated += MainMenu_ItemActivated;
 		lastVisibleMenu = mainMenu;
@@ -136,7 +136,7 @@ internal class Menu : Script
 		cbAttachNothing = new NativeCheckboxItem("Attach to nothing", attachNothing);
 		cbAttachNothing.CheckboxChanged += MainMenu_CheckboxItem_CheckChanged;
 		editGroupMenu = new NativeMenu("Edit Group");
-		editGroupMenu.UseMouse = false;
+		editGroupMenu.UseMouse = true;
 		editGroupMenu.Parent = mainMenu;
 		editGroupMenu.Opening += EditGroupMenu_Opening;
 		objPool.Add(editGroupMenu);
@@ -147,7 +147,7 @@ internal class Menu : Script
 		cbUnwindGroup = new NativeCheckboxItem("Unwind all");
 		cbUnwindGroup.CheckboxChanged += EditGroup_CheckboxItem_CheckChanged;
 		editRopeMenu = new NativeMenu("Edit Rope", "Edit specific rope");
-		editRopeMenu.UseMouse = false;
+		editRopeMenu.UseMouse = true;
 		editRopeMenu.Opening += EditRopeMenu_Opening;
 		objPool.Add(editRopeMenu);
 		liRopeIndex = new NativeListItem<int>("Rope index", NO_ROPES_INDICES.ToArray());
